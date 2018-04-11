@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using TestProj.ADAL;
 
 namespace TestProj
 {
@@ -28,9 +29,11 @@ namespace TestProj
         {
             services.AddMvc();
 
-            var aad = Configuration.GetSection("AAD");
-            var tenantId = aad.GetValue<string>("TenantId");
-            var clientId = aad.GetValue<string>("ClientId");
+            var adal = Configuration.GetSection("ADAL");
+            var tenantId = adal.GetValue<string>("TenantId");
+            var clientId = adal.GetValue<string>("ClientId");
+
+            services.Configure<ADALConfiguration>(adal);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(o =>
